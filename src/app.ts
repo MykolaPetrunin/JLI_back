@@ -3,6 +3,9 @@ import express from 'express';
 import { auth } from 'express-oauth2-jwt-bearer';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+import usersRoutes from './routes/usersRoutes';
+
 dotenv.config();
 
 const app = express();
@@ -22,13 +25,9 @@ app.use(
     tokenSigningAlg: 'HS256',
   }),
 );
-app.get('/api/private', (req, res) => {
-  console.log(req.auth?.payload.email);
-
-  res.json({
-    message: 'Hello from a private endpoint! You need to be authenticated to see this.',
-  });
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/api/users', usersRoutes);
 
 app.use((req, res) => {
   res.status(404).send({ message: '404' });
@@ -36,7 +35,7 @@ app.use((req, res) => {
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.67qegpj.mongodb.net/?retryWrites=true&w=majority`,
+    `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.67qegpj.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`,
   )
   .then(() => {
     app.listen(3050);
