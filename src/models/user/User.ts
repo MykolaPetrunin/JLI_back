@@ -13,11 +13,6 @@ const userSchema = new mongoose.Schema<IUser>({
   words: {
     type: [
       {
-        wordId: {
-          type: String,
-          unique: true,
-          required: true,
-        },
         isKnown: {
           type: Boolean,
           required: true,
@@ -40,24 +35,45 @@ const userSchema = new mongoose.Schema<IUser>({
         },
       },
     ],
+    default: [],
   },
   settings: {
+    _id: false,
+    default: {
+      isWordTranslation: true,
+      repeatCount: 5,
+      wordsPerDay: 10,
+      isTranslationWord: true,
+      isTyped: true,
+    },
     type: {
       isWordTranslation: {
         type: Boolean,
+        default: true,
         required: true,
       },
       isTranslationWord: {
         type: Boolean,
+        default: true,
         required: true,
       },
       isTyped: {
         type: Boolean,
+        default: true,
         required: true,
       },
       repeatCount: {
         type: Number,
         required: true,
+        default: 5,
+        min: 0,
+        max: 5,
+      },
+      wordsPerDay: {
+        type: Number,
+        required: true,
+        default: 10,
+        min: 0,
       },
     },
     required: true,

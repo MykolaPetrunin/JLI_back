@@ -3,12 +3,11 @@ import User from '../../models/user/User';
 import ErrorRes from '../../interfaces/errorRes';
 import Res from '../../interfaces/res';
 import { validationResult } from 'express-validator';
-import IUser from '../../models/user/interfaces/iUser';
-import { getUserImageFromAWS } from '../../services/s3';
+import IUserSettings from '../../models/user/interfaces/iUserSettings';
 
-const getCurrentUser = async (
+const getUserSettings = async (
   req: Request<unknown, unknown, unknown, { userId: string }>,
-  res: Response<Res<IUser> | ErrorRes>,
+  res: Response<Res<IUserSettings> | ErrorRes>,
 ): Promise<void> => {
   const errors = validationResult(req);
 
@@ -19,17 +18,13 @@ const getCurrentUser = async (
 
   const { userId } = req.query;
 
-  User.findById(userId, { firstName: 1, lastName: 1, picture: 1, email: 1 })
+  User.findById(userId, { settings: 1, _id: 0 })
     .then((user) => {
       if (!user) {
         res.status(500).json({ error: 'Tere is no user with such id' });
         return;
       }
-      return user;
-    })
-    .then(getUserImageFromAWS)
-    .then((user) => {
-      res.status(200).json({ data: user });
+      res.status(200).json({ data: user.settings });
       return;
     })
     .catch((err) => {
@@ -38,4 +33,4 @@ const getCurrentUser = async (
     });
 };
 
-export default getCurrentUser;
+export default getUserSettings;

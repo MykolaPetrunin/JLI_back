@@ -9,5 +9,4 @@ interface IUser {
   words?: IUserWord[];
   settings: IUserSettings;
 }
-
 export default IUser;

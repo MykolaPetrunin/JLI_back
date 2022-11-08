@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import User from '../../models/user/User';
-import initUserSettings from './config/initUserSettings';
 import ErrorRes from '../../interfaces/errorRes';
 import Res from '../../interfaces/res';
 import { validationResult } from 'express-validator';
@@ -24,11 +23,9 @@ const getUserId = async (
 
   User.findOne({ email }, { _id: 1 })
     .then((user) => {
-      console.log(user);
       if (!user) {
         const newUser = new User({
           email,
-          settings: initUserSettings,
           picture,
           lastName,
           firstName,

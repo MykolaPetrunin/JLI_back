@@ -1,5 +1,4 @@
 interface IUserWord {
-  wordId: string;
   isKnown: boolean;
   isWordTranslation: boolean;
   isTranslationWord: boolean;
