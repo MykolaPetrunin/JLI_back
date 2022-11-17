@@ -27,6 +27,11 @@ const collectionSchema = new mongoose.Schema<ICollection>({
     default: 0,
     required: true,
   },
+  rate: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
 });
 
 export default mongoose.model<ICollection>('Collection', collectionSchema);

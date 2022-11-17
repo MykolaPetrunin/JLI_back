@@ -7,6 +7,7 @@ interface ICollection {
   isPrivate: boolean;
   like: number;
   disLike: number;
+  rate: number;
 }
 
 export default ICollection;
