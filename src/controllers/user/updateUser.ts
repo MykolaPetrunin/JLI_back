@@ -25,7 +25,8 @@ const updateUser = async (
 
   const { firstName, lastName, picture } = req.body;
 
-  User.findById(req.params.userId, { picture: 1, firstName: 1, lastName: 1 })
+  User.findById(req.params.userId)
+    .select('picture firstName lastName')
     .then((user) => {
       if (!user) {
         res.status(500).json({ error: 'Tere is no user with such id' });

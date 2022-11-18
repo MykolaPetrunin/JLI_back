@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import ICollection from './interfaces/iCollection';
+import paginate from 'mongoose-paginate-v2';
 
 const collectionSchema = new mongoose.Schema<ICollection>({
   isPrivate: {
@@ -11,27 +12,41 @@ const collectionSchema = new mongoose.Schema<ICollection>({
     type: String,
     required: true,
   },
-  user: Schema.Types.ObjectId,
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
   words: {
     type: [Schema.Types.ObjectId],
+    ref: 'Word',
     default: [],
     required: true,
   },
-  like: {
-    type: Number,
-    default: 0,
-    required: true,
-  },
-  disLike: {
-    type: Number,
-    default: 0,
-    required: true,
-  },
-  rate: {
-    type: Number,
-    default: 0,
+  likes: {
+    type: [Schema.Types.ObjectId],
+    ref: 'User',
+    default: [],
     required: true,
   },
 });
 
-export default mongoose.model<ICollection>('Collection', collectionSchema);
+collectionSchema.methods.onLike = function (userId: string) {
+  const newUserId = new Schema.Types.ObjectId(userId);
+
+  this.likes = this.likes.includes(userId)
+    ? this.likes.filter((id: Schema.Types.ObjectId) => newUserId !== id)
+    : [...this.likes, newUserId];
+
+  this.save();
+};
+
+collectionSchema.plugin(paginate);
+
+export interface CollectionDocument extends mongoose.Document, ICollection {}
+
+export default mongoose.model<CollectionDocument, mongoose.PaginateModel<CollectionDocument>>(
+  'Collection',
+  collectionSchema,
+  'collections',
+);

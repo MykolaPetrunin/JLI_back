@@ -9,7 +9,7 @@ collectionsRoutes.get(
   query('search').optional().isString(),
   query('userId').optional().isString(),
   query('limit').optional().isNumeric().default(10),
-  query('skip').optional().isNumeric().default(0),
+  query('page').optional().isNumeric().default(1),
   getCollections,
 );
 

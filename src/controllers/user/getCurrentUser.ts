@@ -19,7 +19,8 @@ const getCurrentUser = async (
 
   const { userId } = req.query;
 
-  User.findById(userId, { firstName: 1, lastName: 1, picture: 1, email: 1 })
+  User.findById(userId)
+    .select('firstName lastName picture email')
     .then((user) => {
       if (!user) {
         res.status(500).json({ error: 'Tere is no user with such id' });

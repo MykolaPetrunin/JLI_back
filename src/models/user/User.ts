@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import IUser from './interfaces/iUser';
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -13,6 +13,12 @@ const userSchema = new mongoose.Schema<IUser>({
   words: {
     type: [
       {
+        wordId: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          unique: true,
+          ref: 'Word',
+        },
         isKnown: {
           type: Boolean,
           required: true,

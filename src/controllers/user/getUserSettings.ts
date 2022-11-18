@@ -18,7 +18,8 @@ const getUserSettings = async (
 
   const { userId } = req.query;
 
-  User.findById(userId, { settings: 1, _id: 0 })
+  User.findById(userId)
+    .select('settings -_id')
     .then((user) => {
       if (!user) {
         res.status(500).json({ error: 'Tere is no user with such id' });

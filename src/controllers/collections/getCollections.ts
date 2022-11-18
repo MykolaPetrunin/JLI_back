@@ -8,8 +8,8 @@ import ResWithPagination from '../../interfaces/resWithPagination';
 interface GetCollectionsQuery {
   userId?: string;
   search?: string;
-  limit: number;
-  skip: number;
+  limit?: number;
+  page?: number;
 }
 
 const getCollections = async (
@@ -23,21 +23,47 @@ const getCollections = async (
     return;
   }
 
-  const { userId, search, limit, skip } = req.query;
+  const { userId, search, limit = 10, page = 1 } = req.query;
 
-  Collection.find({
-    ...(search ? { $text: { $search: search } } : {}),
-    ...(userId ? { user: userId } : {}),
-  })
-    .sort({ rate: -1, score: { $meta: 'textScore' } })
-    .skip(skip)
-    .limit(limit)
-    .then((collections) => {
-      res.status(200).json({
-        data: collections,
-        pagination: { skipped: skip, perPage: limit, totalCount: collections },
-      });
+  console.log(req.header('CurrentUserId'));
+
+  Collection.paginate(
+    {
+      ...(search ? { $text: { $search: search } } : {}),
+      $project: {
+        test: limit,
+      },
+      ...(userId ? { user: req.header('CurrentUserId') } : {}),
+    },
+    {
+      sort: { rate: -1 },
+      page: page,
+      limit: limit,
+      projection: {
+        test: 1,
+      },
+      populate: {
+        path: 'user',
+        select: 'picture firstName lastName',
+      },
+      select: 'name isPrivate likes ',
+    },
+  ).then((result) => {
+    res.status(200).json({
+      data: result.docs,
+      pagination: {
+        limit: result.limit,
+        page: result.page,
+        totalDocs: result.totalDocs,
+        hasNextPage: result.hasNextPage,
+        hasPrevPage: result.hasPrevPage,
+        nextPage: result.nextPage,
+        pagingCounter: result.pagingCounter,
+        prevPage: result.prevPage,
+        totalPages: result.totalPages,
+      },
     });
+  });
 };
 
 export default getCollections;

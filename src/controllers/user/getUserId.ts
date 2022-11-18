@@ -21,7 +21,8 @@ const getUserId = async (
   }
   const { email, picture, lastName, firstName } = req.body;
 
-  User.findOne({ email }, { _id: 1 })
+  User.findOne({ email })
+    .select('_id')
     .then((user) => {
       if (!user) {
         const newUser = new User({
