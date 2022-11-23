@@ -1,6 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 import ICollection from './interfaces/iCollection';
 import paginate from 'mongoose-paginate-v2';
+import aggregatePaginate from 'mongoose-aggregate-paginate-v2';
+import IAggregatedCollection from './interfaces/IAggregatedCollection';
 
 const collectionSchema = new mongoose.Schema<ICollection>({
   isPrivate: {
@@ -42,11 +44,17 @@ collectionSchema.methods.onLike = function (userId: string) {
 };
 
 collectionSchema.plugin(paginate);
+collectionSchema.plugin(aggregatePaginate);
 
 export interface CollectionDocument extends mongoose.Document, ICollection {}
+export interface CollectionAggregateDocument extends mongoose.Document, IAggregatedCollection {}
 
-export default mongoose.model<CollectionDocument, mongoose.PaginateModel<CollectionDocument>>(
-  'Collection',
-  collectionSchema,
-  'collections',
-);
+export const CollectionModel = mongoose.model<
+  CollectionDocument,
+  mongoose.PaginateModel<CollectionDocument>
+>('Collection', collectionSchema, 'collections');
+
+export const ShortCollectionModel = mongoose.model<
+  CollectionDocument,
+  mongoose.AggregatePaginateModel<CollectionAggregateDocument>
+>('Collection', collectionSchema, 'collections');

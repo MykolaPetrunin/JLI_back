@@ -12,8 +12,8 @@ dotenv.config();
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 
-const updateUser = async (
-  req: Request<{ userId: string }, unknown, Omit<IUser, 'email' | 'words' | 'settings'>, unknown>,
+const updateCurrentUserUser = async (
+  req: Request<unknown, unknown, Omit<IUser, 'email' | 'words' | 'settings'>, unknown>,
   res: Response<Res<IUser> | ErrorRes>,
 ): Promise<void> => {
   const errors = validationResult(req);
@@ -25,7 +25,7 @@ const updateUser = async (
 
   const { firstName, lastName, picture } = req.body;
 
-  User.findById(req.params.userId)
+  User.findById(req.header('CurrentUserId'))
     .select('picture firstName lastName')
     .then((user) => {
       if (!user) {
@@ -62,4 +62,4 @@ const updateUser = async (
     });
 };
 
-export default updateUser;
+export default updateCurrentUserUser;

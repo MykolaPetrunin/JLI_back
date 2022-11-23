@@ -17,7 +17,7 @@ const getCurrentUser = async (
     return;
   }
 
-  const { userId } = req.query;
+  const userId = req.header('CurrentUserId');
 
   User.findById(userId)
     .select('firstName lastName picture email')

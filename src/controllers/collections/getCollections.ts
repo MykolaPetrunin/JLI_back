@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import ErrorRes from '../../interfaces/errorRes';
-import ICollection from '../../models/collection/interfaces/iCollection';
-import Collection from '../../models/collection/Collection';
+import { ShortCollectionModel } from '../../models/collection/Collection';
 import { validationResult } from 'express-validator';
 import ResWithPagination from '../../interfaces/resWithPagination';
+import IAggregatedCollection from '../../models/collection/interfaces/IAggregatedCollection';
+import mongoose from 'mongoose';
 
 interface GetCollectionsQuery {
-  userId?: string;
+  isMy?: boolean;
   search?: string;
   limit?: number;
   page?: number;
@@ -14,7 +15,7 @@ interface GetCollectionsQuery {
 
 const getCollections = async (
   req: Request<unknown, unknown, unknown, GetCollectionsQuery>,
-  res: Response<ResWithPagination<ICollection[]> | ErrorRes>,
+  res: Response<ResWithPagination<IAggregatedCollection[]> | ErrorRes>,
 ): Promise<void> => {
   const errors = validationResult(req);
 
@@ -23,32 +24,89 @@ const getCollections = async (
     return;
   }
 
-  const { userId, search, limit = 10, page = 1 } = req.query;
+  const { isMy = false, search, limit = 10, page = 1 } = req.query;
 
-  console.log(req.header('CurrentUserId'));
+  const myUserId = new mongoose.Types.ObjectId(req.header('CurrentUserId'));
 
-  Collection.paginate(
+  const collectionsAggregate = ShortCollectionModel.aggregate([
     {
-      ...(search ? { $text: { $search: search } } : {}),
+      $match: {
+        ...(search ? { $text: { $search: search } } : {}),
+        ...(isMy ? { user: myUserId } : {}),
+        ...(!isMy ? { isPrivate: false } : {}),
+      },
+    },
+    {
       $project: {
-        test: limit,
+        name: 1,
+        isPrivate: 1,
+        wordsCount: { $size: '$words' },
+        ...(isMy ? {} : { user: 1 }),
+        ...(isMy ? {} : { liked: { $in: [req.header('CurrentUserId'), '$likes'] } }),
       },
-      ...(userId ? { user: req.header('CurrentUserId') } : {}),
     },
-    {
-      sort: { rate: -1 },
-      page: page,
-      limit: limit,
-      projection: {
-        test: 1,
-      },
-      populate: {
-        path: 'user',
-        select: 'picture firstName lastName',
-      },
-      select: 'name isPrivate likes ',
-    },
-  ).then((result) => {
+    { $sort: { rate: -1 } },
+    ...(isMy
+      ? []
+      : [
+          {
+            $lookup: {
+              from: 'users',
+              let: {
+                user: '$user',
+              },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $eq: ['$_id', '$$user'],
+                    },
+                  },
+                },
+                {
+                  $project: {
+                    picture: 1,
+                    name: {
+                      $concat: [
+                        { $toUpper: { $substrCP: ['$firstName', 0, 1] } },
+                        {
+                          $substrCP: [
+                            '$firstName',
+                            1,
+                            { $subtract: [{ $strLenCP: '$firstName' }, 1] },
+                          ],
+                        },
+                        ' ',
+                        { $toUpper: { $substrCP: ['$lastName', 0, 1] } },
+                        {
+                          $substrCP: [
+                            '$lastName',
+                            1,
+                            { $subtract: [{ $strLenCP: '$lastName' }, 1] },
+                          ],
+                        },
+                      ],
+                    },
+                  },
+                },
+              ],
+              as: 'user',
+            },
+          },
+          {
+            $set: {
+              user: {
+                $arrayElemAt: ['$user', 0],
+              },
+            },
+          },
+        ]),
+  ]);
+
+  ShortCollectionModel.aggregatePaginate(collectionsAggregate, {
+    page: page,
+    limit: limit,
+  }).then((result) => {
     res.status(200).json({
       data: result.docs,
       pagination: {

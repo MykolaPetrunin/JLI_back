@@ -6,7 +6,7 @@ import { validationResult } from 'express-validator';
 import IUserSettings from '../../models/user/interfaces/iUserSettings';
 
 const updateUserSettings = async (
-  req: Request<{ userId: string }, unknown, IUserSettings, unknown>,
+  req: Request<unknown, unknown, IUserSettings, unknown>,
   res: Response<Res<IUserSettings> | ErrorRes>,
 ): Promise<void> => {
   const errors = validationResult(req);
@@ -18,7 +18,7 @@ const updateUserSettings = async (
 
   const data = req.body;
 
-  User.findById(req.params.userId)
+  User.findById(req.header('CurrentUserId'))
     .select('settings')
     .then((user) => {
       if (!user) {
