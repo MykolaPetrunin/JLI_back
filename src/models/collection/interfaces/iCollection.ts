@@ -1,11 +1,11 @@
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
 
 interface ICollection {
   name: string;
-  words: Schema.Types.ObjectId[];
-  user: Schema.Types.ObjectId;
+  words: Types.ObjectId[];
+  user: Types.ObjectId;
   isPrivate: boolean;
-  likes: Schema.Types.ObjectId[];
+  likes: Types.ObjectId[];
 }
 
 export default ICollection;

@@ -7,7 +7,6 @@ import bodyParser from 'body-parser';
 import usersRoutes from './routes/usersRoutes';
 import imageRoutes from './routes/imageRoutes';
 import collectionsRoutes from './routes/collectionsRoutes';
-import axios from 'axios';
 
 dotenv.config();
 
@@ -20,19 +19,6 @@ app.use(
   }),
 );
 
-app.use(async (req, res, next) => {
-  const token = req.get('Authorization');
-
-  try {
-    const resData = await axios.get(`${process.env.AUTH0_BASE_URL}userinfo`, {
-      headers: { Authorization: token },
-    });
-    console.log(resData.data);
-  } catch (err) {
-    console.log(err);
-  }
-  next();
-});
 app.use(
   auth({
     audience: process.env.AUTH0_AUDIENCE,

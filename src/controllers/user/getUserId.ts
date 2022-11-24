@@ -21,25 +21,26 @@ const getUserId = async (
   }
   const { email, picture, lastName, firstName } = req.body;
 
-  User.findOne({ email })
-    .select('_id')
-    .then((user) => {
-      if (!user) {
-        const newUser = new User({
-          email,
-          picture,
-          lastName,
-          firstName,
-        });
-        newUser.save();
-        res.status(200).json({ data: newUser._id.toString() });
-        return;
-      }
-      res.status(200).json({ data: user._id.toString() });
-    })
-    .catch((err) => {
-      res.status(500).json({ error: err.message });
-    });
+  try {
+    const user = await User.findOne({ email }).select('_id');
+    if (!user) {
+      const newUser = new User({
+        email,
+        picture,
+        lastName,
+        firstName,
+      });
+      await newUser.save();
+
+      res.status(200).json({ data: newUser._id.toString() });
+      return;
+    }
+    res.status(200).json({ data: user._id.toString() });
+    return;
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+    return;
+  }
 };
 
 export default getUserId;

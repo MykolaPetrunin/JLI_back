@@ -10,6 +10,11 @@ const wordSchema = new mongoose.Schema<IWord>({
     type: String,
     required: true,
   },
+  hasCollection: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
   image: String,
 });
 

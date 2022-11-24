@@ -1,6 +1,7 @@
 interface IWord {
   word: string;
   translation: string;
+  hasCollection: boolean;
   image?: string;
 }
 

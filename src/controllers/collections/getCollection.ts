@@ -87,7 +87,6 @@ const getCollection = async (
       },
     ]).then((result) => {
       const collection = result[0];
-      console.log(result);
       if (!collection) {
         res.status(404).json({ error: 'There is no collection with such id' });
         return;

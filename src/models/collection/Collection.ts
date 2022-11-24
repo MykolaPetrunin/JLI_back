@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 import ICollection from './interfaces/iCollection';
 import paginate from 'mongoose-paginate-v2';
 import aggregatePaginate from 'mongoose-aggregate-paginate-v2';
@@ -20,13 +20,13 @@ const collectionSchema = new mongoose.Schema<ICollection>({
     ref: 'User',
   },
   words: {
-    type: [Schema.Types.ObjectId],
+    type: [Types.ObjectId],
     ref: 'Word',
     default: [],
     required: true,
   },
   likes: {
-    type: [Schema.Types.ObjectId],
+    type: [Types.ObjectId],
     ref: 'User',
     default: [],
     required: true,
@@ -34,10 +34,10 @@ const collectionSchema = new mongoose.Schema<ICollection>({
 });
 
 collectionSchema.methods.onLike = function (userId: string) {
-  const newUserId = new Schema.Types.ObjectId(userId);
+  const newUserId = new Types.ObjectId(userId);
 
   this.likes = this.likes.includes(userId)
-    ? this.likes.filter((id: Schema.Types.ObjectId) => newUserId !== id)
+    ? this.likes.filter((id: Types.ObjectId) => newUserId !== id)
     : [...this.likes, newUserId];
 
   this.save();

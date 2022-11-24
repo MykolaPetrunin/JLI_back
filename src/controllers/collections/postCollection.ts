@@ -8,7 +8,6 @@ import mongoose from 'mongoose';
 import ICollection from '../../models/collection/interfaces/iCollection';
 
 interface PostCollectionBody {
-  userId: string;
   name: string;
   words: Array<{ word: string; translation: string; image: string }>;
   isPrivate: boolean;

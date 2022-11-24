@@ -20,7 +20,7 @@ const getCurrentUser = async (
   const userId = req.header('CurrentUserId');
 
   User.findById(userId)
-    .select('firstName lastName picture email')
+    .select('firstName lastName picture email collections')
     .then((user) => {
       if (!user) {
         res.status(500).json({ error: 'Tere is no user with such id' });
