@@ -1,8 +1,8 @@
 import ICollection from '../../../models/collection/interfaces/iCollection';
-import IWord from '../../../models/word/interfaces/iWord';
+import ICollectionWord from '../../../models/collection/interfaces/ICollectionWord';
 
 interface ICollectionWithWordsRes extends Omit<ICollection, 'words'> {
-  words: IWord;
+  words: ICollectionWord;
 }
 
 export default ICollectionWithWordsRes;

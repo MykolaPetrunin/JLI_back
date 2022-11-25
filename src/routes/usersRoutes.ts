@@ -4,11 +4,13 @@ import getUserId from '../controllers/user/getUserId';
 import { check, body } from 'express-validator';
 import getUserSettings from '../controllers/user/getUserSettings';
 import updateUserSettings from '../controllers/user/updateUserSettings';
-import updateCurrentUserUser from '../controllers/user/updateCurrentUserUser';
+import updateCurrentUser from '../controllers/user/updateCurrentUser';
+import postStudyCollection from '../controllers/user/postStudyCollection';
 const usersRoutes = express.Router();
 
 usersRoutes.get('/current', getCurrentUser);
 usersRoutes.get('/me/settings', getUserSettings);
+
 usersRoutes.put(
   '/me/settings',
   body('isWordTranslation').isBoolean(),
@@ -18,6 +20,7 @@ usersRoutes.put(
   body('wordsPerDay').isInt({ min: 0 }),
   updateUserSettings,
 );
+
 usersRoutes.post(
   '/id',
   check('email').isEmail(),
@@ -27,12 +30,14 @@ usersRoutes.post(
   getUserId,
 );
 
+usersRoutes.post('/studyCollection', body('collectionId').isString(), postStudyCollection);
+
 usersRoutes.patch(
   '/me',
   body('firstName').optional().isString(),
   body('lastName').optional().isString(),
   body('picture').optional().isString(),
-  updateCurrentUserUser,
+  updateCurrentUser,
 );
 
 export default usersRoutes;

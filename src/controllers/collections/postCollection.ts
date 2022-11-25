@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import Res from '../../interfaces/res';
 import ErrorRes from '../../interfaces/errorRes';
-import Word from '../../models/word/Word';
 import { validationResult } from 'express-validator';
 import { CollectionModel } from '../../models/collection/Collection';
 import mongoose from 'mongoose';
@@ -26,12 +25,11 @@ const postCollection = async (
   const { words, name, isPrivate } = req.body;
 
   try {
-    const wordsRes = await Word.insertMany(words);
     const collection = await CollectionModel.create({
       name,
       user: new mongoose.Types.ObjectId(req.header('CurrentUserId')),
       isPrivate,
-      words: wordsRes.map(({ _id }) => _id),
+      words: words,
     });
     res.status(200).json({ data: collection });
   } catch (err) {

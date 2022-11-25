@@ -19,6 +19,7 @@ const getUserId = async (
   if (!errors.isEmpty()) {
     res.status(400).json({ errors: errors.array() });
   }
+
   const { email, picture, lastName, firstName } = req.body;
 
   try {

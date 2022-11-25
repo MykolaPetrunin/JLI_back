@@ -1,7 +1,7 @@
-import { Types } from 'mongoose';
-
 interface IUserWord {
-  wordId: Types.ObjectId[];
+  word: string;
+  translation: string;
+  image?: string;
   isKnown: boolean;
   isWordTranslation: boolean;
   isTranslationWord: boolean;

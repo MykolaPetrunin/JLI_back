@@ -20,9 +20,13 @@ const collectionSchema = new mongoose.Schema<ICollection>({
     ref: 'User',
   },
   words: {
-    type: [Types.ObjectId],
-    ref: 'Word',
-    default: [],
+    type: [
+      {
+        word: { type: String, required: true },
+        translation: { type: String, required: true },
+        image: String,
+      },
+    ],
     required: true,
   },
   likes: {

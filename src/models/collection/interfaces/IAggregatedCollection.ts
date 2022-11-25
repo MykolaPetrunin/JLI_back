@@ -1,5 +1,5 @@
 import ICollection from './iCollection';
-import IWord from '../../word/interfaces/iWord';
+import ICollectionWord from './ICollectionWord';
 import { Types } from 'mongoose';
 
 interface IAggregatedCollection extends Pick<ICollection, 'name' | 'isPrivate'> {
@@ -10,7 +10,7 @@ interface IAggregatedCollection extends Pick<ICollection, 'name' | 'isPrivate'> 
     name: string;
   };
   wordsCount: number;
-  words?: IWord[];
+  words?: ICollectionWord[];
 }
 
 export default IAggregatedCollection;

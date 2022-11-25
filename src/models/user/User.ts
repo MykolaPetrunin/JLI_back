@@ -19,30 +19,33 @@ const userSchema = new mongoose.Schema<IUser>({
   words: {
     type: [
       {
-        wordId: {
-          type: Types.ObjectId,
-          required: true,
-          ref: 'Word',
-        },
+        word: { type: String, required: true },
+        translation: { type: String, required: true },
+        image: String,
         isKnown: {
           type: Boolean,
           required: true,
+          default: false,
         },
         isWordTranslation: {
           type: Boolean,
           required: true,
+          default: false,
         },
         isTranslationWord: {
           type: Boolean,
           required: true,
+          default: false,
         },
         isTyped: {
           type: Boolean,
           required: true,
+          default: false,
         },
         repeatCount: {
           type: Number,
           required: true,
+          default: 0,
         },
       },
     ],

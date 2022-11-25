@@ -12,7 +12,7 @@ dotenv.config();
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 
-const updateCurrentUserUser = async (
+const updateCurrentUser = async (
   req: Request<unknown, unknown, Omit<IUser, 'email' | 'words' | 'settings'>, unknown>,
   res: Response<Res<IUser> | ErrorRes>,
 ): Promise<void> => {
@@ -62,4 +62,4 @@ const updateCurrentUserUser = async (
     });
 };
 
-export default updateCurrentUserUser;
+export default updateCurrentUser;

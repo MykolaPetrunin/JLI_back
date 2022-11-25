@@ -4,11 +4,10 @@ import ErrorRes from '../../interfaces/errorRes';
 import { validationResult } from 'express-validator';
 import ICollection from '../../models/collection/interfaces/iCollection';
 import { CollectionModel } from '../../models/collection/Collection';
-import Word from '../../models/word/Word';
 
 interface PatchCollectionBody {
   name?: string;
-  words?: Array<{ id?: string; word: string; translation: string; image: string }>;
+  words?: Array<{ word: string; translation: string; image: string }>;
   isPrivate?: boolean;
 }
 
@@ -35,20 +34,7 @@ const patchCollection = async (
 
     if (isPrivate !== undefined) collection.isPrivate = isPrivate;
     if (name) collection.name = name;
-
-    if (words) {
-      await Word.updateMany({ _id: { $in: collection.words } }, { $set: { hasCollection: false } });
-
-      const wordsRes = await Word.insertMany(
-        words.map((item) => ({
-          word: item.word,
-          image: item.image,
-          translation: item.translation,
-        })),
-      );
-
-      collection.words = wordsRes.map(({ _id }) => _id);
-    }
+    if (words) collection.words = words;
 
     collection.likes = [];
 

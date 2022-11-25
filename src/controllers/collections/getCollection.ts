@@ -25,7 +25,7 @@ const getCollection = async (
 
     const myUserId = req.header('CurrentUserId');
 
-    ShortCollectionModel.aggregate<CollectionAggregateDocument>([
+    await ShortCollectionModel.aggregate<CollectionAggregateDocument>([
       {
         $match: {
           _id: new mongoose.Types.ObjectId(collectionId),
@@ -41,7 +41,6 @@ const getCollection = async (
           wordsCount: { $size: '$words' },
         },
       },
-      { $lookup: { from: 'words', localField: 'words', foreignField: '_id', as: 'words' } },
       {
         $lookup: {
           from: 'users',
