@@ -8,6 +8,15 @@ interface IUser {
   firstName?: string;
   lastName?: string;
   words?: IUserWord[];
+  wordsToKnow?: IUserWord[];
+  wordsWordTranslation?: IUserWord[];
+  wordsTranslationWord?: IUserWord[];
+  wordsSpell?: IUserWord[];
+  wordsRepeat?: IUserWord[];
+  wordsRepeatWeek?: IUserWord[];
+  wordsRepeatMonth?: IUserWord[];
+  wordsRepeat3Month?: IUserWord[];
+  wordsRepeat6Month?: IUserWord[];
   collections: Types.ObjectId[];
   settings: IUserSettings;
 }

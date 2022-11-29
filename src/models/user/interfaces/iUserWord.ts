@@ -1,12 +1,9 @@
 interface IUserWord {
+  _id?: string;
   word: string;
   translation: string;
   image?: string;
-  isKnown: boolean;
-  isWordTranslation: boolean;
-  isTranslationWord: boolean;
-  isTyped: boolean;
-  repeatCount: number;
+  lastRepeated?: number;
 }
 
 export default IUserWord;

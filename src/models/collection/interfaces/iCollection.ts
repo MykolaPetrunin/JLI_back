@@ -1,9 +1,9 @@
 import { Types } from 'mongoose';
-import ICollectionWord from './ICollectionWord';
+import IUserWord from '../../user/interfaces/iUserWord';
 
 interface ICollection {
   name: string;
-  words: ICollectionWord[];
+  words: IUserWord[];
   user: Types.ObjectId;
   isPrivate: boolean;
   likes: Types.ObjectId[];
