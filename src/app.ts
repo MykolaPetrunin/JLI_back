@@ -44,6 +44,6 @@ mongoose
     `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.67qegpj.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`,
   )
   .then(() => {
-    app.listen(3050);
+    app.listen(process.env.PORT);
   })
   .catch((err) => console.log(err));
