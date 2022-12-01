@@ -1,8 +1,9 @@
 {
+  "name": "jli-back",
   "scripts": {
-    "start": "ts-node ./src/app.ts",
+    "start": "npm run build && node ./dist/app.js",
     "start:prod": "npm run build && node ./dist/app.js",
-    "build": "npx tsc && node ./dist/app.js",
+    "build": "npx tsc",
     "start:nodemon": "./node_modules/nodemon/bin/nodemon.js"
   },
   "devDependencies": {
