@@ -12,10 +12,11 @@ dotenv.config();
 
 const app = express();
 
+const whitelist = ['http://localhost:3000', 'http://localhost']
+
 app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    optionsSuccessStatus: 200,
+  cors( (req, callback) => {
+      callback(null, { origin: whitelist.indexOf(req.header('Origin')) !== -1, optionsSuccessStatus: 200 })
   }),
 );
 
