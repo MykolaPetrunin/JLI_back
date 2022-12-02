@@ -23,8 +23,8 @@ app.use(
   auth({
     audience: process.env.AUTH0_AUDIENCE,
     issuerBaseURL: process.env.AUTH0_BASE_URL,
-    secret: process.env.AUTH0_SECRET,
     tokenSigningAlg: 'HS256',
+    secret: process.env.AUTH0_SECRET,
   }),
 );
 
