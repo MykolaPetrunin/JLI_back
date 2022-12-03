@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 
-const whitelist = ['http://localhost:3000', 'http://localhost']
+const whitelist = ['http://localhost:3000', 'http://localhost', 'https://jli-web.herokuapp.com']
 
 app.use(
   cors( (req, callback) => {
