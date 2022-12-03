@@ -42,6 +42,23 @@ const getCurrentUser = async (
           wordsWordTranslation: 1,
           wordsTranslationWord: 1,
           wordsSpell: 1,
+          wordsHeap: {
+            $slice: [
+              {
+                $concatArrays: [
+                  '$wordsRepeat',
+                  '$wordsRepeatWeek',
+                  '$wordsRepeatWeek',
+                  '$wordsRepeatMonth',
+                  '$wordsRepeat3Month',
+                  '$wordsRepeat6Month',
+                  '$words',
+                ],
+              },
+              0,
+              20,
+            ],
+          },
           wordsRepeat: {
             $filter: {
               input: '$wordsRepeat',
@@ -105,6 +122,7 @@ const getCurrentUser = async (
         },
       },
     ]);
+
     if (!aggregation[0]) {
       res.status(500).json({ error: 'Tere is no user with such id' });
       return;

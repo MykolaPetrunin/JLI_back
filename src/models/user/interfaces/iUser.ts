@@ -13,6 +13,7 @@ interface IUser {
   wordsTranslationWord?: IUserWord[];
   wordsSpell?: IUserWord[];
   wordsRepeat?: IUserWord[];
+  wordsHeap?: IUserWord[];
   wordsRepeatWeek?: IUserWord[];
   wordsRepeatMonth?: IUserWord[];
   wordsRepeat3Month?: IUserWord[];
