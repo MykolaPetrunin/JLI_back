@@ -42,21 +42,14 @@ const getCurrentUser = async (
           wordsWordTranslation: 1,
           wordsTranslationWord: 1,
           wordsSpell: 1,
-          wordsHeap: {
-            $slice: [
-              {
-                $concatArrays: [
-                  '$wordsRepeat',
-                  '$wordsRepeatWeek',
-                  '$wordsRepeatWeek',
-                  '$wordsRepeatMonth',
-                  '$wordsRepeat3Month',
-                  '$wordsRepeat6Month',
-                  '$words',
-                ],
-              },
-              0,
-              20,
+          wordsRepeatHeap: {
+            $concatArrays: [
+              '$wordsRepeat',
+              '$wordsRepeatWeek',
+              '$wordsRepeatWeek',
+              '$wordsRepeatMonth',
+              '$wordsRepeat3Month',
+              '$wordsRepeat6Month',
             ],
           },
           wordsRepeat: {
@@ -129,8 +122,9 @@ const getCurrentUser = async (
     }
 
     const user = await getUserImageFromAWS(aggregation[0]);
+    const userWords = await User.findById(userId).select('words');
 
-    res.status(200).json({ data: user });
+    res.status(200).json({ data: { ...user, wordsHeap: userWords.getRandomHeap(20) } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

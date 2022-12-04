@@ -1,19 +1,17 @@
 import express from 'express';
 import getCurrentUser from '../controllers/user/getCurrentUser';
 import getUserId from '../controllers/user/getUserId';
-import { check, body, query } from 'express-validator';
+import { check, body } from 'express-validator';
 import getUserSettings from '../controllers/user/getUserSettings';
 import updateUserSettings from '../controllers/user/updateUserSettings';
 import updateCurrentUser from '../controllers/user/updateCurrentUser';
 import postStudyCollection from '../controllers/user/postStudyCollection';
 import postWordToNextStep from '../controllers/user/postWordToNextStep';
 import postWordToKnown from '../controllers/user/postWordToKnown';
-import getMyWordsHeap from '../controllers/user/getMyWordsHeap';
 const usersRoutes = express.Router();
 
 usersRoutes.get('/current', getCurrentUser);
 usersRoutes.get('/me/settings', getUserSettings);
-usersRoutes.get('/myWordsHeap', query('limit').optional().isNumeric().default(10), getMyWordsHeap);
 
 usersRoutes.put(
   '/me/settings',

@@ -14,6 +14,7 @@ interface IUser {
   wordsSpell?: IUserWord[];
   wordsRepeat?: IUserWord[];
   wordsHeap?: IUserWord[];
+  wordsRepeatHeap?: IUserWord[];
   wordsRepeatWeek?: IUserWord[];
   wordsRepeatMonth?: IUserWord[];
   wordsRepeat3Month?: IUserWord[];

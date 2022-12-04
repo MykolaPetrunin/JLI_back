@@ -12,11 +12,14 @@ dotenv.config();
 
 const app = express();
 
-const whitelist = ['http://localhost:3000', 'http://localhost', 'https://jli-web.herokuapp.com']
+const whitelist = ['http://localhost:3000', 'http://localhost', 'https://jli-web.herokuapp.com'];
 
 app.use(
-  cors( (req, callback) => {
-      callback(null, { origin: whitelist.indexOf(req.header('Origin')) !== -1, optionsSuccessStatus: 200 })
+  cors((req, callback) => {
+    callback(null, {
+      origin: whitelist.indexOf(req.header('Origin')) !== -1,
+      optionsSuccessStatus: 200,
+    });
   }),
 );
 
@@ -45,6 +48,6 @@ mongoose
     `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.67qegpj.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`,
   )
   .then(() => {
-    app.listen(process.env.PORT);
+    app.listen(process.env.PORT || 3050);
   })
   .catch((err) => console.log(err));
