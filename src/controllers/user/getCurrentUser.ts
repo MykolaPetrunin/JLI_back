@@ -46,7 +46,6 @@ const getCurrentUser = async (
             $concatArrays: [
               '$wordsRepeat',
               '$wordsRepeatWeek',
-              '$wordsRepeatWeek',
               '$wordsRepeatMonth',
               '$wordsRepeat3Month',
               '$wordsRepeat6Month',
